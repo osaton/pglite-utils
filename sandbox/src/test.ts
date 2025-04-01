@@ -24,6 +24,7 @@ export async function smokeTest(adapter: DriverAdapter) {
   await test.testCreateAndDeleteChildParent();
   await test.interactiveTransactions();
   await test.explicitTransaction();
+  await test.testBigInt();
 
   console.log("[nodejs] disconnecting...");
   await prisma.$disconnect();
@@ -239,5 +240,15 @@ class SmokeTest {
       "[nodejs] resultDeleteMany",
       superjson.serialize(resultDeleteMany).json
     );
+  }
+
+  async testBigInt() {
+    const result = await this.prisma.type_test_2.create({
+      data: {
+        bigint_column: 17435114878,
+      },
+    });
+
+    console.log("[nodejs] testBigInt result", superjson.serialize(result).json);
   }
 }
